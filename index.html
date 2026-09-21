@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PawVital Simulation</title>
+</head>
+
+<body>
+
+    <h1>🐾 PawVital</h1>
+    <h2>Pet Health Monitoring Simulation</h2>
+
+    <hr>
+
+    <h3>Rest Detection</h3>
+
+    <p>Motion Level:
+        <span id="motion">Low</span>
+    </p>
+
+    <p>Posture:
+        <span id="posture">Lying</span>
+    </p>
+
+    <p>Rest State:
+        <strong id="rest">TRUE</strong>
+    </p>
+
+    <button onclick="startSimulation()">
+        Start Measurement
+    </button>
+
+    <hr>
+
+    <h3>Vital Measurements</h3>
+
+    <p>❤️ Heart Rate:
+        <strong id="hr">--</strong> BPM
+    </p>
+
+    <p>🩸 Blood Pressure:
+        <strong id="bp">--</strong> mmHg
+    </p>
+
+    <p>💧 Hydration Risk:
+        <strong id="hydration">--</strong>
+    </p>
+
+    <p>🌡 Skin Temperature:
+        <strong id="temp">--</strong> °C
+    </p>
+
+    <p>📊 Signal Quality:
+        <strong id="quality">Waiting</strong>
+    </p>
+
+    <hr>
+
+    <h3>System Status</h3>
+
+    <p id="status">
+        Waiting for measurement...
+    </p>
+
+    <script>
+
+        function startSimulation() {
+
+            document.getElementById("status").innerText =
+                "Measuring vitals...";
+
+            document.getElementById("quality").innerText =
+                "Good";
+
+            document.getElementById("hr").innerText =
+                Math.floor(Math.random() * 20) + 70;
+
+            document.getElementById("bp").innerText =
+                "118 / 76";
+
+            document.getElementById("hydration").innerText =
+                "Normal";
+
+            document.getElementById("temp").innerText =
+                "38.2";
+
+            document.getElementById("status").innerText =
+                "✓ Clean reading obtained. Report generated.";
+        }
+
+    </script>
+
+</body>
+</html>
