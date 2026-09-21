@@ -1,93 +1,666 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>PawVital Simulation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PawVital Simulation</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    color: #172033;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 25px;
+}
+
+.header {
+    background: #172033;
+    color: white;
+    padding: 25px;
+    border-radius: 18px;
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 32px;
+}
+
+.header p {
+    margin: 8px 0 0;
+}
+
+.status {
+    margin-top: 20px;
+    padding: 18px;
+    background: white;
+    border-radius: 15px;
+    border-left: 6px solid #4caf50;
+}
+
+.status h2 {
+    margin-top: 0;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.status-box {
+    background: #f1f4f8;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.status-box strong {
+    display: block;
+    margin-top: 6px;
+    font-size: 18px;
+}
+
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: #172033;
+    color: white;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+
+.section-title {
+    margin-top: 25px;
+}
+
+.sensor-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+    margin-top: 0;
+}
+
+.value {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.normal {
+    color: #2e7d32;
+}
+
+.warning {
+    color: #c62828;
+}
+
+.progress {
+    width: 100%;
+    height: 12px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #4caf50;
+    transition: width 0.5s;
+}
+
+.report {
+    margin-top: 25px;
+    background: white;
+    padding: 22px;
+    border-radius: 15px;
+}
+
+.report-box {
+    padding: 15px;
+    background: #f1f4f8;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 25px;
+    color: #666;
+    font-size: 14px;
+}
+
+@media(max-width:700px) {
+
+    .status-grid,
+    .sensor-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header h1 {
+        font-size: 26px;
+    }
+}
+
+</style>
 </head>
 
 <body>
 
-    <h1>🐾 PawVital</h1>
-    <h2>Pet Health Monitoring Simulation</h2>
+<div class="container">
 
-    <hr>
+    <!-- HEADER -->
 
-    <h3>Rest Detection</h3>
+    <div class="header">
 
-    <p>Motion Level:
-        <span id="motion">Low</span>
-    </p>
+        <h1>🐾 PawVital</h1>
 
-    <p>Posture:
-        <span id="posture">Lying</span>
-    </p>
+        <p>
+            Periodic Multi-Vital Health Band for Pets
+        </p>
 
-    <p>Rest State:
-        <strong id="rest">TRUE</strong>
-    </p>
+        <p>
+            Simulation Prototype
+        </p>
 
-    <button onclick="startSimulation()">
-        Start Measurement
+    </div>
+
+
+    <!-- REST DETECTION -->
+
+    <div class="status">
+
+        <h2>🐕 Step 1 — Rest Detection</h2>
+
+        <div class="status-grid">
+
+            <div class="status-box">
+                Motion Level
+                <strong id="motion">Low</strong>
+            </div>
+
+            <div class="status-box">
+                Posture
+                <strong id="posture">Lying</strong>
+            </div>
+
+            <div class="status-box">
+                Rest State
+                <strong id="rest">WAITING</strong>
+            </div>
+
+        </div>
+
+        <p id="restMessage">
+            System is waiting for a stable resting state.
+        </p>
+
+        <div class="progress">
+            <div class="progress-bar" id="restProgress"></div>
+        </div>
+
+    </div>
+
+
+    <!-- START BUTTON -->
+
+    <button id="startButton" onclick="startSimulation()">
+        ▶ Start PawVital Simulation
     </button>
 
-    <hr>
 
-    <h3>Vital Measurements</h3>
+    <!-- SENSOR MEASUREMENT -->
 
-    <p>❤️ Heart Rate:
-        <strong id="hr">--</strong> BPM
-    </p>
+    <h2 class="section-title">
+        📡 Step 2 — Sensor Measurement
+    </h2>
 
-    <p>🩸 Blood Pressure:
-        <strong id="bp">--</strong> mmHg
-    </p>
+    <div class="sensor-grid">
 
-    <p>💧 Hydration Risk:
-        <strong id="hydration">--</strong>
-    </p>
 
-    <p>🌡 Skin Temperature:
-        <strong id="temp">--</strong> °C
-    </p>
+        <!-- HEART RATE -->
 
-    <p>📊 Signal Quality:
-        <strong id="quality">Waiting</strong>
-    </p>
+        <div class="card">
 
-    <hr>
+            <h3>❤️ PPG — Heart Rate</h3>
 
-    <h3>System Status</h3>
+            <div class="value" id="heartRate">
+                --
+            </div>
 
-    <p id="status">
-        Waiting for measurement...
-    </p>
+            <p>BPM</p>
 
-    <script>
+            <p id="heartStatus">
+                Waiting
+            </p>
 
-        function startSimulation() {
+        </div>
 
-            document.getElementById("status").innerText =
-                "Measuring vitals...";
 
-            document.getElementById("quality").innerText =
-                "Good";
+        <!-- BLOOD PRESSURE -->
 
-            document.getElementById("hr").innerText =
-                Math.floor(Math.random() * 20) + 70;
+        <div class="card">
 
-            document.getElementById("bp").innerText =
-                "118 / 76";
+            <h3>🩸 ECG + PPG — BP Estimate</h3>
 
-            document.getElementById("hydration").innerText =
-                "Normal";
+            <div class="value" id="bloodPressure">
+                --
+            </div>
 
-            document.getElementById("temp").innerText =
-                "38.2";
+            <p>mmHg</p>
 
-            document.getElementById("status").innerText =
-                "✓ Clean reading obtained. Report generated.";
+            <p id="bpStatus">
+                Waiting
+            </p>
+
+        </div>
+
+
+        <!-- HYDRATION -->
+
+        <div class="card">
+
+            <h3>💧 Bioimpedance — Hydration</h3>
+
+            <div class="value" id="hydration">
+                --
+            </div>
+
+            <p id="hydrationStatus">
+                Waiting
+            </p>
+
+        </div>
+
+
+        <!-- TEMPERATURE -->
+
+        <div class="card">
+
+            <h3>🌡 Skin Temperature</h3>
+
+            <div class="value" id="temperature">
+                --
+            </div>
+
+            <p>°C</p>
+
+            <p id="tempStatus">
+                Waiting
+            </p>
+
+        </div>
+
+
+        <!-- SIGNAL QUALITY -->
+
+        <div class="card">
+
+            <h3>📊 Signal Quality</h3>
+
+            <div class="value" id="signal">
+                --
+            </div>
+
+            <p id="signalStatus">
+                Waiting
+            </p>
+
+        </div>
+
+
+        <!-- MOTION SENSOR -->
+
+        <div class="card">
+
+            <h3>📡 Accelerometer + Gyroscope</h3>
+
+            <div class="value" id="motionSensor">
+                --
+            </div>
+
+            <p id="motionStatus">
+                Waiting
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- VALIDATION -->
+
+    <div class="report">
+
+        <h2>🔍 Step 3 — Data Validation</h2>
+
+        <div class="report-box">
+
+            <p>
+                Motion detected:
+                <strong id="validationMotion">--</strong>
+            </p>
+
+            <p>
+                Signal quality:
+                <strong id="validationSignal">--</strong>
+            </p>
+
+            <p>
+                Electrode contact:
+                <strong id="validationContact">--</strong>
+            </p>
+
+            <p>
+                Final decision:
+                <strong id="validationResult">Waiting</strong>
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- FINAL REPORT -->
+
+    <div class="report">
+
+        <h2>📋 PawVital Health Report</h2>
+
+        <div class="report-box">
+
+            <p>
+                ❤️ Heart Rate:
+                <strong id="finalHR">--</strong>
+            </p>
+
+            <p>
+                🩸 Blood Pressure:
+                <strong id="finalBP">--</strong>
+            </p>
+
+            <p>
+                💧 Hydration Risk:
+                <strong id="finalHydration">--</strong>
+            </p>
+
+            <p>
+                🌡 Skin Temperature:
+                <strong id="finalTemp">--</strong>
+            </p>
+
+            <p>
+                📊 Overall Status:
+                <strong id="finalStatus">Waiting</strong>
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+
+        PawVital Simulation Prototype<br>
+        Sensor values shown here are simulated for demonstration.
+
+    </div>
+
+</div>
+
+
+<script>
+
+let simulationRunning = false;
+
+
+/* START SIMULATION */
+
+function startSimulation() {
+
+    if (simulationRunning) {
+        return;
+    }
+
+    simulationRunning = true;
+
+    const button = document.getElementById("startButton");
+
+    button.disabled = true;
+
+    button.innerText = "⏳ Detecting Rest State...";
+
+
+    /* RESET */
+
+    document.getElementById("rest").innerText = "CHECKING";
+
+    document.getElementById("restMessage").innerText =
+        "Checking motion, posture and stability...";
+
+
+    document.getElementById("motion").innerText = "Low";
+
+    document.getElementById("posture").innerText = "Lying";
+
+
+    let progress = 0;
+
+
+    /* ACCELERATED REST DETECTION */
+
+    const restTimer = setInterval(function() {
+
+        progress += 20;
+
+        document.getElementById("restProgress").style.width =
+            progress + "%";
+
+
+        if (progress >= 100) {
+
+            clearInterval(restTimer);
+
+            document.getElementById("rest").innerText =
+                "TRUE";
+
+            document.getElementById("rest").className =
+                "normal";
+
+            document.getElementById("restMessage").innerText =
+                "✓ Stable resting state confirmed. Starting measurement...";
+
+
+            button.innerText =
+                "⏳ Measuring Vitals...";
+
+
+            setTimeout(measureVitals, 1000);
+
         }
 
-    </script>
+    }, 1000);
+
+}
+
+
+/* VITAL MEASUREMENT */
+
+function measureVitals() {
+
+
+    /* SIMULATED SENSOR VALUES */
+
+    const heartRate =
+        Math.floor(Math.random() * 16) + 72;
+
+    const systolic =
+        Math.floor(Math.random() * 9) + 112;
+
+    const diastolic =
+        Math.floor(Math.random() * 7) + 72;
+
+    const temperature =
+        (37.8 + Math.random() * 0.8).toFixed(1);
+
+
+    const hydrationOptions = [
+        "Normal",
+        "Normal",
+        "Normal",
+        "Mild Risk"
+    ];
+
+    const hydration =
+        hydrationOptions[
+            Math.floor(Math.random() *
+            hydrationOptions.length)
+        ];
+
+
+    /* DISPLAY */
+
+    document.getElementById("heartRate").innerText =
+        heartRate;
+
+    document.getElementById("bloodPressure").innerText =
+        systolic + " / " + diastolic;
+
+    document.getElementById("hydration").innerText =
+        hydration;
+
+    document.getElementById("temperature").innerText =
+        temperature;
+
+
+    /* SENSOR STATUS */
+
+    document.getElementById("heartStatus").innerText =
+        "✓ PPG signal detected";
+
+    document.getElementById("bpStatus").innerText =
+        "✓ PTT-based estimate";
+
+    document.getElementById("hydrationStatus").innerText =
+        "✓ Bioimpedance analysis";
+
+    document.getElementById("tempStatus").innerText =
+        "✓ Temperature detected";
+
+
+    /* SIGNAL */
+
+    document.getElementById("signal").innerText =
+        "GOOD";
+
+    document.getElementById("signalStatus").innerText =
+        "Clean waveform";
+
+
+    /* MOTION */
+
+    document.getElementById("motionSensor").innerText =
+        "LOW";
+
+    document.getElementById("motionStatus").innerText =
+        "Stable";
+
+
+    /* VALIDATION */
+
+    document.getElementById("validationMotion").innerText =
+        "No";
+
+    document.getElementById("validationSignal").innerText =
+        "Good";
+
+    document.getElementById("validationContact").innerText =
+        "Good";
+
+    document.getElementById("validationResult").innerText =
+        "✓ ACCEPT DATA";
+
+
+    /* FINAL REPORT */
+
+    document.getElementById("finalHR").innerText =
+        heartRate + " BPM";
+
+    document.getElementById("finalBP").innerText =
+        systolic + " / " + diastolic + " mmHg";
+
+    document.getElementById("finalHydration").innerText =
+        hydration;
+
+    document.getElementById("finalTemp").innerText =
+        temperature + " °C";
+
+
+    if (hydration === "Normal") {
+
+        document.getElementById("finalStatus").innerText =
+            "✓ NORMAL";
+
+        document.getElementById("finalStatus").className =
+            "normal";
+
+    } else {
+
+        document.getElementById("finalStatus").innerText =
+            "⚠ MILD HYDRATION RISK";
+
+        document.getElementById("finalStatus").className =
+            "warning";
+
+    }
+
+
+    document.getElementById("startButton").disabled = false;
+
+    document.getElementById("startButton").innerText =
+        "🔄 Run New Measurement";
+
+    simulationRunning = false;
+
+}
+
+</script>
 
 </body>
 </html>
