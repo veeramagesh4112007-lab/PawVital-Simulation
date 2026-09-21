@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PawVital Simulation</title>
+<title>PawVital - AI Pet Health Simulation</title>
 
 <style>
 
@@ -15,73 +17,148 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #f4f7fb;
-    color: #172033;
+    background: #eef2f7;
+    color: #182230;
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 1100px;
     margin: auto;
-    padding: 25px;
+    padding: 20px;
 }
+
+/* HEADER */
 
 .header {
     background: #172033;
     color: white;
-    padding: 25px;
+    padding: 30px;
     border-radius: 18px;
     text-align: center;
 }
 
 .header h1 {
+    font-size: 38px;
     margin: 0;
-    font-size: 32px;
 }
 
 .header p {
-    margin: 8px 0 0;
+    margin: 8px;
 }
 
-.status {
-    margin-top: 20px;
-    padding: 18px;
+/* GENERAL CARD */
+
+.section {
     background: white;
-    border-radius: 15px;
-    border-left: 6px solid #4caf50;
+    margin-top: 20px;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-.status h2 {
+.section h2 {
     margin-top: 0;
 }
 
-.status-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-}
+/* VIDEO */
 
-.status-box {
-    background: #f1f4f8;
+.video-box {
+    background: #111827;
     padding: 15px;
-    border-radius: 12px;
+    border-radius: 15px;
     text-align: center;
 }
 
-.status-box strong {
-    display: block;
-    margin-top: 6px;
-    font-size: 18px;
+.video-box video {
+    width: 100%;
+    max-height: 450px;
+    border-radius: 12px;
 }
+
+.video-placeholder {
+    padding: 70px 20px;
+    color: white;
+    border: 2px dashed #777;
+    border-radius: 12px;
+}
+
+.small-note {
+    font-size: 13px;
+    color: #666;
+}
+
+/* WORKFLOW */
+
+.workflow {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.workflow-box {
+    background: #f1f4f8;
+    padding: 18px 8px;
+    text-align: center;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+.arrow {
+    text-align: center;
+    font-size: 25px;
+}
+
+/* SENSOR INPUT */
+
+.input-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.input-card {
+    background: #f7f9fc;
+    padding: 18px;
+    border-radius: 14px;
+    border: 1px solid #ddd;
+}
+
+.input-card label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+input[type="range"] {
+    width: 100%;
+}
+
+.range-value {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* BUTTON */
 
 button {
     width: 100%;
     margin-top: 20px;
-    padding: 15px;
+    padding: 16px;
     border: none;
     border-radius: 12px;
     background: #172033;
     color: white;
     font-size: 17px;
+    font-weight: bold;
     cursor: pointer;
 }
 
@@ -89,44 +166,15 @@ button:hover {
     opacity: 0.9;
 }
 
-button:disabled {
-    background: #999;
-    cursor: not-allowed;
-}
+/* PROCESSING */
 
-.section-title {
-    margin-top: 25px;
-}
-
-.sensor-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-}
-
-.card h3 {
-    margin-top: 0;
-}
-
-.value {
-    font-size: 28px;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-.normal {
-    color: #2e7d32;
-}
-
-.warning {
-    color: #c62828;
+.processing {
+    display: none;
+    margin-top: 20px;
+    padding: 18px;
+    background: #f1f4f8;
+    border-radius: 12px;
+    text-align: center;
 }
 
 .progress {
@@ -135,532 +183,985 @@ button:disabled {
     background: #ddd;
     border-radius: 10px;
     overflow: hidden;
-    margin-top: 10px;
 }
 
 .progress-bar {
     height: 100%;
     width: 0%;
     background: #4caf50;
-    transition: width 0.5s;
+    transition: width 0.4s;
 }
 
-.report {
-    margin-top: 25px;
-    background: white;
-    padding: 22px;
+/* OUTPUT */
+
+.output-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.output-card {
+    background: #f7f9fc;
+    padding: 20px;
+    border-radius: 14px;
+    text-align: center;
+}
+
+.output-card h3 {
+    margin-top: 0;
+}
+
+.output-value {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.normal {
+    color: #24833b;
+}
+
+.warning {
+    color: #c62828;
+}
+
+/* VALIDATION */
+
+.validation {
+    background: #f7f9fc;
+    padding: 20px;
+    border-radius: 14px;
+}
+
+.validation p {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* AI */
+
+.ai-box {
+    background: #172033;
+    color: white;
+    padding: 25px;
     border-radius: 15px;
 }
 
-.report-box {
-    padding: 15px;
-    background: #f1f4f8;
+.ai-result {
+    background: #263247;
+    padding: 18px;
     border-radius: 12px;
-    margin-top: 10px;
+    margin-top: 15px;
 }
+
+/* FOOTER */
 
 .footer {
     text-align: center;
-    margin-top: 25px;
+    padding: 25px;
     color: #666;
-    font-size: 14px;
+    font-size: 13px;
 }
 
-@media(max-width:700px) {
+@media(max-width:800px) {
 
-    .status-grid,
-    .sensor-grid {
+    .workflow {
         grid-template-columns: 1fr;
     }
 
-    .header h1 {
-        font-size: 26px;
+    .input-grid,
+    .output-grid {
+        grid-template-columns: 1fr;
     }
+
 }
 
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
-    <!-- HEADER -->
 
-    <div class="header">
+<!-- HEADER -->
 
-        <h1>🐾 PawVital</h1>
+<div class="header">
 
-        <p>
-            Periodic Multi-Vital Health Band for Pets
-        </p>
+<h1>🐾 PawVital</h1>
 
-        <p>
-            Simulation Prototype
-        </p>
+<p>AI-Assisted Multi-Vital Pet Health Monitoring</p>
 
-    </div>
+<p>Interactive Working Simulation</p>
 
+</div>
 
-    <!-- REST DETECTION -->
 
-    <div class="status">
+<!-- REAL WORLD VIDEO -->
 
-        <h2>🐕 Step 1 — Rest Detection</h2>
+<div class="section">
 
-        <div class="status-grid">
+<h2>🎬 1. Real-World AI Concept Demonstration</h2>
 
-            <div class="status-box">
-                Motion Level
-                <strong id="motion">Low</strong>
-            </div>
+<div class="video-box">
 
-            <div class="status-box">
-                Posture
-                <strong id="posture">Lying</strong>
-            </div>
+<!--
+Upload your AI demonstration video to:
 
-            <div class="status-box">
-                Rest State
-                <strong id="rest">WAITING</strong>
-            </div>
+assets/pawvital-demo.mp4
 
-        </div>
+Then this video will automatically appear here.
+-->
 
-        <p id="restMessage">
-            System is waiting for a stable resting state.
-        </p>
+<video controls>
+    <source src="assets/pawvital-demo.mp4" type="video/mp4">
+    
+    Your browser does not support video playback.
+</video>
 
-        <div class="progress">
-            <div class="progress-bar" id="restProgress"></div>
-        </div>
+</div>
 
-    </div>
+<p class="small-note">
 
+Conceptual AI visualization of PawVital operation.
+The video represents the proposed real-world workflow and is not
+evidence of a completed clinical device.
 
-    <!-- START BUTTON -->
+</p>
 
-    <button id="startButton" onclick="startSimulation()">
-        ▶ Start PawVital Simulation
-    </button>
+</div>
 
 
-    <!-- SENSOR MEASUREMENT -->
+<!-- SYSTEM WORKFLOW -->
 
-    <h2 class="section-title">
-        📡 Step 2 — Sensor Measurement
-    </h2>
+<div class="section">
 
-    <div class="sensor-grid">
+<h2>⚙️ 2. PawVital System Workflow</h2>
 
+<div class="workflow">
 
-        <!-- HEART RATE -->
+<div class="workflow-box">
+🐕<br>
+Pet
+</div>
 
-        <div class="card">
+<div class="workflow-box">
+📡<br>
+Sensors
+</div>
 
-            <h3>❤️ PPG — Heart Rate</h3>
+<div class="workflow-box">
+💻<br>
+Processing
+</div>
 
-            <div class="value" id="heartRate">
-                --
-            </div>
+<div class="workflow-box">
+🤖<br>
+AI Analysis
+</div>
 
-            <p>BPM</p>
+<div class="workflow-box">
+📋<br>
+Health Report
+</div>
 
-            <p id="heartStatus">
-                Waiting
-            </p>
+</div>
 
-        </div>
+</div>
 
 
-        <!-- BLOOD PRESSURE -->
+<!-- SENSOR INPUT -->
 
-        <div class="card">
+<div class="section">
 
-            <h3>🩸 ECG + PPG — BP Estimate</h3>
+<h2>🧪 3. Live Sensor Input Simulation</h2>
 
-            <div class="value" id="bloodPressure">
-                --
-            </div>
+<p>
+Enter or change the simulated sensor values and press
+<strong>PROCESS SENSOR DATA</strong>.
+</p>
 
-            <p>mmHg</p>
 
-            <p id="bpStatus">
-                Waiting
-            </p>
+<div class="input-grid">
 
-        </div>
 
+<!-- PPG -->
 
-        <!-- HYDRATION -->
+<div class="input-card">
 
-        <div class="card">
+<label>❤️ PPG Sensor — Heart Rate</label>
 
-            <h3>💧 Bioimpedance — Hydration</h3>
+<input
+type="number"
+id="ppg"
+value="82"
+min="40"
+max="180">
 
-            <div class="value" id="hydration">
-                --
-            </div>
+<p>Simulated BPM input</p>
 
-            <p id="hydrationStatus">
-                Waiting
-            </p>
+</div>
 
-        </div>
 
+<!-- ECG -->
 
-        <!-- TEMPERATURE -->
+<div class="input-card">
 
-        <div class="card">
+<label>🫀 ECG Signal Quality</label>
 
-            <h3>🌡 Skin Temperature</h3>
+<select id="ecg">
 
-            <div class="value" id="temperature">
-                --
-            </div>
+<option value="Good">Good</option>
+<option value="Moderate">Moderate</option>
+<option value="Poor">Poor</option>
 
-            <p>°C</p>
+</select>
 
-            <p id="tempStatus">
-                Waiting
-            </p>
+</div>
 
-        </div>
 
+<!-- BIOIMPEDANCE -->
 
-        <!-- SIGNAL QUALITY -->
+<div class="input-card">
 
-        <div class="card">
+<label>💧 Bioimpedance</label>
 
-            <h3>📊 Signal Quality</h3>
+<input
+type="number"
+id="impedance"
+value="520"
+min="300"
+max="900">
 
-            <div class="value" id="signal">
-                --
-            </div>
+<p>Simulated impedance value (Ω)</p>
 
-            <p id="signalStatus">
-                Waiting
-            </p>
+</div>
 
-        </div>
 
+<!-- TEMPERATURE -->
 
-        <!-- MOTION SENSOR -->
+<div class="input-card">
 
-        <div class="card">
+<label>🌡 Temperature</label>
 
-            <h3>📡 Accelerometer + Gyroscope</h3>
+<input
+type="number"
+id="temperature"
+value="38.2"
+step="0.1"
+min="30"
+max="45">
 
-            <div class="value" id="motionSensor">
-                --
-            </div>
+<p>°C</p>
 
-            <p id="motionStatus">
-                Waiting
-            </p>
+</div>
 
-        </div>
 
-    </div>
+<!-- MOTION -->
 
+<div class="input-card">
 
-    <!-- VALIDATION -->
+<label>📡 Motion Level</label>
 
-    <div class="report">
+<select id="motion">
 
-        <h2>🔍 Step 3 — Data Validation</h2>
+<option value="Low">Low</option>
+<option value="Medium">Medium</option>
+<option value="High">High</option>
 
-        <div class="report-box">
+</select>
 
-            <p>
-                Motion detected:
-                <strong id="validationMotion">--</strong>
-            </p>
+</div>
 
-            <p>
-                Signal quality:
-                <strong id="validationSignal">--</strong>
-            </p>
 
-            <p>
-                Electrode contact:
-                <strong id="validationContact">--</strong>
-            </p>
+<!-- POSTURE -->
 
-            <p>
-                Final decision:
-                <strong id="validationResult">Waiting</strong>
-            </p>
+<div class="input-card">
 
-        </div>
+<label>🐕 Posture</label>
 
-    </div>
+<select id="posture">
 
+<option value="Lying">Lying</option>
+<option value="Sitting">Sitting</option>
+<option value="Standing">Standing</option>
+<option value="Moving">Moving</option>
 
-    <!-- FINAL REPORT -->
+</select>
 
-    <div class="report">
+</div>
 
-        <h2>📋 PawVital Health Report</h2>
 
-        <div class="report-box">
+<!-- ACCELEROMETER -->
 
-            <p>
-                ❤️ Heart Rate:
-                <strong id="finalHR">--</strong>
-            </p>
+<div class="input-card">
 
-            <p>
-                🩸 Blood Pressure:
-                <strong id="finalBP">--</strong>
-            </p>
+<label>📈 Accelerometer</label>
 
-            <p>
-                💧 Hydration Risk:
-                <strong id="finalHydration">--</strong>
-            </p>
+<input
+type="number"
+id="accel"
+value="0.2"
+step="0.1"
+min="0"
+max="10">
 
-            <p>
-                🌡 Skin Temperature:
-                <strong id="finalTemp">--</strong>
-            </p>
+<p>Simulated motion magnitude</p>
 
-            <p>
-                📊 Overall Status:
-                <strong id="finalStatus">Waiting</strong>
-            </p>
+</div>
 
-        </div>
 
-    </div>
+<!-- GYROSCOPE -->
 
+<div class="input-card">
 
-    <div class="footer">
+<label>🔄 Gyroscope</label>
 
-        PawVital Simulation Prototype<br>
-        Sensor values shown here are simulated for demonstration.
+<input
+type="number"
+id="gyro"
+value="0.1"
+step="0.1"
+min="0"
+max="10">
 
-    </div>
+<p>Simulated rotation magnitude</p>
+
+</div>
+
+
+</div>
+
+
+<button onclick="processData()">
+
+🔬 PROCESS SENSOR DATA
+
+</button>
+
+
+<div class="processing" id="processing">
+
+<h3>Processing Sensor Data...</h3>
+
+<div class="progress">
+
+<div class="progress-bar" id="progress"></div>
+
+</div>
+
+<p id="processingText">
+Checking sensor signals...
+</p>
+
+</div>
+
+</div>
+
+
+<!-- VALIDATION -->
+
+<div class="section">
+
+<h2>🔍 4. Data Validation</h2>
+
+<div class="validation">
+
+<p>
+Motion Status:
+<strong id="vMotion">Waiting</strong>
+</p>
+
+<p>
+Rest Detection:
+<strong id="vRest">Waiting</strong>
+</p>
+
+<p>
+ECG Signal:
+<strong id="vECG">Waiting</strong>
+</p>
+
+<p>
+Sensor Contact:
+<strong id="vContact">Waiting</strong>
+</p>
+
+<p>
+Signal Quality:
+<strong id="vSignal">Waiting</strong>
+</p>
+
+<p>
+Final Decision:
+<strong id="vDecision">Waiting</strong>
+</p>
+
+</div>
+
+</div>
+
+
+<!-- OUTPUT -->
+
+<div class="section">
+
+<h2>📊 5. Processed Vital Output</h2>
+
+<div class="output-grid">
+
+
+<div class="output-card">
+
+<h3>❤️ Heart Rate</h3>
+
+<div
+class="output-value"
+id="outHR">
+
+--
+
+</div>
+
+<p>BPM</p>
+
+</div>
+
+
+<div class="output-card">
+
+<h3>🩸 BP Estimate</h3>
+
+<div
+class="output-value"
+id="outBP">
+
+--
+
+</div>
+
+<p>mmHg</p>
+
+</div>
+
+
+<div class="output-card">
+
+<h3>💧 Hydration</h3>
+
+<div
+class="output-value"
+id="outHydration">
+
+--
+
+</div>
+
+</div>
+
+
+<div class="output-card">
+
+<h3>🌡 Temperature</h3>
+
+<div
+class="output-value"
+id="outTemp">
+
+--
+
+</div>
+
+<p>°C</p>
+
+</div>
+
+
+<div class="output-card">
+
+<h3>🛌 Rest State</h3>
+
+<div
+class="output-value"
+id="outRest">
+
+--
+
+</div>
+
+</div>
+
+
+<div class="output-card">
+
+<h3>📊 Signal Quality</h3>
+
+<div
+class="output-value"
+id="outSignal">
+
+--
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- AI -->
+
+<div class="section">
+
+<div class="ai-box">
+
+<h2>🤖 6. AI Pattern Analysis</h2>
+
+<p>
+
+The software demonstration combines the validated sensor
+inputs to generate an interpretable health-status summary.
+
+</p>
+
+<div class="ai-result">
+
+<strong>AI Analysis Result:</strong>
+
+<p id="aiResult">
+
+Waiting for sensor data...
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- FINAL REPORT -->
+
+<div class="section">
+
+<h2>📋 7. PawVital Health Report</h2>
+
+<div class="validation">
+
+<p>
+Pet Status:
+<strong id="reportPet">Waiting</strong>
+</p>
+
+<p>
+Heart Rate:
+<strong id="reportHR">--</strong>
+</p>
+
+<p>
+Blood Pressure:
+<strong id="reportBP">--</strong>
+</p>
+
+<p>
+Hydration:
+<strong id="reportHydration">--</strong>
+</p>
+
+<p>
+Temperature:
+<strong id="reportTemp">--</strong>
+</p>
+
+<p>
+Overall Result:
+<strong id="reportResult">Waiting</strong>
+</p>
+
+</div>
+
+</div>
+
+
+<div class="footer">
+
+PawVital Simulation Prototype<br>
+
+Sensor readings and AI analysis shown here are simulated
+for demonstration and are not a medical diagnosis.
+
+</div>
+
 
 </div>
 
 
 <script>
 
-let simulationRunning = false;
+
+function processData() {
 
 
-/* START SIMULATION */
+const ppg =
+Number(document.getElementById("ppg").value);
 
-function startSimulation() {
+const impedance =
+Number(document.getElementById("impedance").value);
 
-    if (simulationRunning) {
-        return;
-    }
+const temperature =
+Number(document.getElementById("temperature").value);
 
-    simulationRunning = true;
+const ecg =
+document.getElementById("ecg").value;
 
-    const button = document.getElementById("startButton");
+const motion =
+document.getElementById("motion").value;
 
-    button.disabled = true;
+const posture =
+document.getElementById("posture").value;
 
-    button.innerText = "⏳ Detecting Rest State...";
+const accel =
+Number(document.getElementById("accel").value);
 
-
-    /* RESET */
-
-    document.getElementById("rest").innerText = "CHECKING";
-
-    document.getElementById("restMessage").innerText =
-        "Checking motion, posture and stability...";
-
-
-    document.getElementById("motion").innerText = "Low";
-
-    document.getElementById("posture").innerText = "Lying";
+const gyro =
+Number(document.getElementById("gyro").value);
 
 
-    let progress = 0;
+const processing =
+document.getElementById("processing");
+
+const progress =
+document.getElementById("progress");
+
+const processingText =
+document.getElementById("processingText");
 
 
-    /* ACCELERATED REST DETECTION */
+processing.style.display = "block";
 
-    const restTimer = setInterval(function() {
-
-        progress += 20;
-
-        document.getElementById("restProgress").style.width =
-            progress + "%";
+progress.style.width = "0%";
 
 
-        if (progress >= 100) {
-
-            clearInterval(restTimer);
-
-            document.getElementById("rest").innerText =
-                "TRUE";
-
-            document.getElementById("rest").className =
-                "normal";
-
-            document.getElementById("restMessage").innerText =
-                "✓ Stable resting state confirmed. Starting measurement...";
+let value = 0;
 
 
-            button.innerText =
-                "⏳ Measuring Vitals...";
+const timer = setInterval(function() {
 
 
-            setTimeout(measureVitals, 1000);
+value += 20;
 
-        }
+progress.style.width =
+value + "%";
 
-    }, 1000);
+
+if(value === 20) {
+
+processingText.innerText =
+"Checking motion and rest state...";
+
+}
+
+if(value === 40) {
+
+processingText.innerText =
+"Checking PPG and ECG signals...";
+
+}
+
+if(value === 60) {
+
+processingText.innerText =
+"Processing bioimpedance and temperature...";
+
+}
+
+if(value === 80) {
+
+processingText.innerText =
+"Validating sensor data...";
+
+}
+
+if(value >= 100) {
+
+clearInterval(timer);
+
+processingText.innerText =
+"Generating health report...";
+
+setTimeout(function() {
+
+processing.style.display = "none";
+
+generateOutput(
+ppg,
+impedance,
+temperature,
+ecg,
+motion,
+posture,
+accel,
+gyro
+);
+
+}, 500);
+
+}
+
+}, 400);
 
 }
 
 
-/* VITAL MEASUREMENT */
-
-function measureVitals() {
-
-
-    /* SIMULATED SENSOR VALUES */
-
-    const heartRate =
-        Math.floor(Math.random() * 16) + 72;
-
-    const systolic =
-        Math.floor(Math.random() * 9) + 112;
-
-    const diastolic =
-        Math.floor(Math.random() * 7) + 72;
-
-    const temperature =
-        (37.8 + Math.random() * 0.8).toFixed(1);
+function generateOutput(
+ppg,
+impedance,
+temperature,
+ecg,
+motion,
+posture,
+accel,
+gyro
+) {
 
 
-    const hydrationOptions = [
-        "Normal",
-        "Normal",
-        "Normal",
-        "Mild Risk"
-    ];
+/* REST DETECTION */
 
-    const hydration =
-        hydrationOptions[
-            Math.floor(Math.random() *
-            hydrationOptions.length)
-        ];
+let resting = false;
 
+if(
+motion === "Low" &&
+posture === "Lying" &&
+accel < 1 &&
+gyro < 1
+) {
 
-    /* DISPLAY */
+resting = true;
 
-    document.getElementById("heartRate").innerText =
-        heartRate;
-
-    document.getElementById("bloodPressure").innerText =
-        systolic + " / " + diastolic;
-
-    document.getElementById("hydration").innerText =
-        hydration;
-
-    document.getElementById("temperature").innerText =
-        temperature;
+}
 
 
-    /* SENSOR STATUS */
+/* SIGNAL QUALITY */
 
-    document.getElementById("heartStatus").innerText =
-        "✓ PPG signal detected";
+let signalGood = true;
 
-    document.getElementById("bpStatus").innerText =
-        "✓ PTT-based estimate";
+if(ecg === "Poor") {
 
-    document.getElementById("hydrationStatus").innerText =
-        "✓ Bioimpedance analysis";
+signalGood = false;
 
-    document.getElementById("tempStatus").innerText =
-        "✓ Temperature detected";
+}
 
 
-    /* SIGNAL */
+/* MOTION VALIDATION */
 
-    document.getElementById("signal").innerText =
-        "GOOD";
-
-    document.getElementById("signalStatus").innerText =
-        "Clean waveform";
+document.getElementById("vMotion").innerText =
+motion;
 
 
-    /* MOTION */
+if(resting) {
 
-    document.getElementById("motionSensor").innerText =
-        "LOW";
+document.getElementById("vRest").innerText =
+"✓ Stable resting state";
 
-    document.getElementById("motionStatus").innerText =
-        "Stable";
+} else {
 
+document.getElementById("vRest").innerText =
+"⚠ Rest not confirmed";
 
-    /* VALIDATION */
-
-    document.getElementById("validationMotion").innerText =
-        "No";
-
-    document.getElementById("validationSignal").innerText =
-        "Good";
-
-    document.getElementById("validationContact").innerText =
-        "Good";
-
-    document.getElementById("validationResult").innerText =
-        "✓ ACCEPT DATA";
+}
 
 
-    /* FINAL REPORT */
+/* ECG */
 
-    document.getElementById("finalHR").innerText =
-        heartRate + " BPM";
-
-    document.getElementById("finalBP").innerText =
-        systolic + " / " + diastolic + " mmHg";
-
-    document.getElementById("finalHydration").innerText =
-        hydration;
-
-    document.getElementById("finalTemp").innerText =
-        temperature + " °C";
+document.getElementById("vECG").innerText =
+ecg;
 
 
-    if (hydration === "Normal") {
+/* CONTACT */
 
-        document.getElementById("finalStatus").innerText =
-            "✓ NORMAL";
-
-        document.getElementById("finalStatus").className =
-            "normal";
-
-    } else {
-
-        document.getElementById("finalStatus").innerText =
-            "⚠ MILD HYDRATION RISK";
-
-        document.getElementById("finalStatus").className =
-            "warning";
-
-    }
+document.getElementById("vContact").innerText =
+"✓ Detected";
 
 
-    document.getElementById("startButton").disabled = false;
+/* SIGNAL */
 
-    document.getElementById("startButton").innerText =
-        "🔄 Run New Measurement";
+if(signalGood) {
 
-    simulationRunning = false;
+document.getElementById("vSignal").innerText =
+"✓ Good";
+
+} else {
+
+document.getElementById("vSignal").innerText =
+"⚠ Poor";
+
+}
+
+
+/* DECISION */
+
+let accepted =
+resting && signalGood;
+
+
+if(accepted) {
+
+document.getElementById("vDecision").innerText =
+"✓ ACCEPT DATA";
+
+} else {
+
+document.getElementById("vDecision").innerText =
+"⚠ REJECT / RETRY";
+
+}
+
+
+/* HEART RATE */
+
+document.getElementById("outHR").innerText =
+ppg + " BPM";
+
+
+/* BP DEMONSTRATION */
+
+let systolic =
+Math.round(105 + (ppg * 0.15));
+
+let diastolic =
+Math.round(65 + (ppg * 0.08));
+
+
+document.getElementById("outBP").innerText =
+systolic + "/" + diastolic;
+
+
+/* HYDRATION DEMONSTRATION */
+
+let hydration;
+
+
+if(impedance < 600) {
+
+hydration = "NORMAL";
+
+} else if(impedance < 700) {
+
+hydration = "MILD RISK";
+
+} else {
+
+hydration = "HIGH RISK";
+
+}
+
+
+document.getElementById("outHydration").innerText =
+hydration;
+
+
+/* TEMPERATURE */
+
+document.getElementById("outTemp").innerText =
+temperature + " °C";
+
+
+/* REST */
+
+document.getElementById("outRest").innerText =
+resting ? "TRUE" : "FALSE";
+
+
+/* SIGNAL */
+
+document.getElementById("outSignal").innerText =
+signalGood ? "GOOD" : "POOR";
+
+
+/* AI DEMONSTRATION */
+
+let aiMessage = "";
+
+
+if(!accepted) {
+
+aiMessage =
+"Input quality is insufficient. The system recommends waiting for a stable resting state and better signal quality before generating a final reading.";
+
+}
+
+else if(hydration === "HIGH RISK") {
+
+aiMessage =
+"Multi-sensor pattern indicates a possible hydration concern. Further monitoring is recommended.";
+
+}
+
+else if(hydration === "MILD RISK") {
+
+aiMessage =
+"Sensor pattern indicates a possible mild hydration concern. Continue monitoring.";
+
+}
+
+else {
+
+aiMessage =
+"Validated sensor pattern is within the simulated normal demonstration range.";
+
+}
+
+
+document.getElementById("aiResult").innerText =
+aiMessage;
+
+
+/* FINAL REPORT */
+
+document.getElementById("reportPet").innerText =
+resting ? "RESTING" : "NOT RESTING";
+
+
+document.getElementById("reportHR").innerText =
+ppg + " BPM";
+
+
+document.getElementById("reportBP").innerText =
+systolic + "/" + diastolic + " mmHg";
+
+
+document.getElementById("reportHydration").innerText =
+hydration;
+
+
+document.getElementById("reportTemp").innerText =
+temperature + " °C";
+
+
+if(accepted) {
+
+document.getElementById("reportResult").innerText =
+"✓ DATA ACCEPTED";
+
+} else {
+
+document.getElementById("reportResult").innerText =
+"⚠ READING REJECTED — RETRY";
+
+}
 
 }
 
 </script>
 
+
 </body>
+
 </html>
