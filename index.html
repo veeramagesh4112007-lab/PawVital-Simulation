@@ -71,8 +71,13 @@ body {
 
 .video-box video {
     width: 100%;
+    max-width: 100%;
+    height: auto;
     max-height: 450px;
     border-radius: 12px;
+    display: block;
+    margin: auto;
+    background: #000;
 }
 
 .video-placeholder {
@@ -274,6 +279,14 @@ button:hover {
         grid-template-columns: 1fr;
     }
 
+    .header h1 {
+        font-size: 30px;
+    }
+
+    .container {
+        padding: 12px;
+    }
+
 }
 
 </style>
@@ -309,17 +322,27 @@ button:hover {
 <div class="video-box">
 
 <!--
-Upload your AI demonstration video to:
+VIDEO FILE LOCATION:
 
 assets/pawvital-demo.mp4
 
-Then this video will automatically appear here.
+Make sure the GitHub repository contains:
+
+assets/
+    pawvital-demo.mp4
 -->
 
-<video controls>
-    <source src="assets/pawvital-demo.mp4" type="video/mp4">
-    
+<video
+    controls
+    playsinline
+    preload="metadata">
+
+    <source
+        src="assets/pawvital-demo.mp4"
+        type="video/mp4">
+
     Your browser does not support video playback.
+
 </video>
 
 </div>
